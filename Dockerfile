@@ -17,6 +17,7 @@ ENV SPARK_HOME /opt/spark
 ENV PATH "${PATH}:${SPARK_HOME}/bin:${SPARK_HOME}/sbin"
 ENV HADOOP_HOME /opt/hadoop
 ENV HADOOP_CONF_DIR ${HADOOP_HOME}/conf
+ENV ICEBERG_VERSION=0.14.1
 
 # download spark
 RUN wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/${TAR_FILE}
@@ -26,6 +27,9 @@ RUN tar -xzvf ${TAR_FILE} -C /opt; \
     rm /${TAR_FILE}
 
 WORKDIR ${SPARK_HOME}
+
+# extensions
+RUN wget -q https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/${ICEBERG_VERSION}/iceberg-spark-runtime-3.3_2.12-${ICEBERG_VERSION}.jar -P ${SPARK_HOME}/jars
 
 ADD entrypoint.sh /entrypoint.sh
 
